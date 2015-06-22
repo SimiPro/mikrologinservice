@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'http://repo.spring.io/libs-release' }
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE'
+    }
+}
+
+apply plugin: 'spring-boot'
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
+    maven { url "http://repo.spring.io/release" }
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:1.2.1.RELEASE"
+    compile 'org.springframework.security.oauth:spring-security-oauth2:2.0.7.RELEASE'
+    compile "org.springframework.boot:spring-boot-starter-security:1.2.1.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:1.2.1.RELEASE"
+    compile "org.hsqldb:hsqldb"
+    compile "org.scala-lang:scala-library:2.11.5"
+    testCompile "junit:junit"
+}
+
+jar {
+    baseName = 'mikrologinservice'
+    version =  '0.1.0'
+}
+
+
