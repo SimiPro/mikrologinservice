@@ -48,7 +48,7 @@ task wrapper(type: Wrapper) {
 
 task stage(type:Copy, dependsOn: [clean,  build]) {
     from jar.archivePath
-    into '/build'
+    into 'build'
     rename {
         'mikrologinservice.jar'
     }
