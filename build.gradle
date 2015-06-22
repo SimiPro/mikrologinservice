@@ -9,12 +9,15 @@ buildscript {
     }
 }
 
+
 apply plugin: 'spring-boot'
 apply plugin: 'java'
 apply plugin: 'scala'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+
+mainClassName = "com.belongo.services.login.main.Application"
 
 repositories {
     mavenCentral()
@@ -36,26 +39,25 @@ dependencies {
 jar {
     baseName = 'mikrologinservice'
     version =  '0.1.0'
-    manifest {
-        attributes 'Main-Class':"com.belongo.services.login.main.Application"
-    }
 }
 
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class':"com.belongo.services.login.main.Application"
-    }
-    version =  '0.1.0'
-    baseName = 'mikrologinserviceFat'
-    from {configurations.compile.collect {it.isDirectory()? it:zipTree(it)}}
-    with jar
-}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.0'
 }
 
-task stage(dependsOn: fatJar) {
+task stage(type:Copy, dependsOn: [clean,  build]) {
+    from jar.archivePath
+    into '/build'
+    rename {
+        'mikrologinservice.jar'
+    }
+}
+
+stage.mustRunAfter(clean)
+
+clean << {
+    project.file('mikrologinservice.jar').delete()
+    FileTree tree = fileTree(dir: 'build')
 }
 
