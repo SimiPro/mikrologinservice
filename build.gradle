@@ -36,13 +36,15 @@ dependencies {
 jar {
     baseName = 'mikrologinservice'
     version =  '0.1.0'
+    manifest {
+        attributes 'Main-Class':"com.belongo.services.login.main.Application"
+    }
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.0'
 }
 
-task stage() {
-
+task stage(dependsOn: jar) {
 }
 
