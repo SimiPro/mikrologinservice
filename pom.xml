@@ -8,6 +8,11 @@
     <artifactId>mikrologinservice</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <start-class>com.belongo.services.login.main.Application</start-class>
+    </properties>
+
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
