@@ -56,8 +56,3 @@ task stage(type:Copy, dependsOn: [clean,  build]) {
 
 stage.mustRunAfter(clean)
 
-clean << {
-    project.file('mikrologinservice.jar').delete()
-    FileTree tree = fileTree(dir: 'build')
-}
-
