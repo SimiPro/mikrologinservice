@@ -1,7 +1,11 @@
 package com.belongo.services.login.config
 
-import com.belongo.services.login.services.UserService
+import javax.annotation.PostConstruct
+import javax.servlet.FilterRegistration
+
+import com.belongo.services.login.services.{User, BelongoUser, UserService}
 import org.springframework.beans.factory.annotation.{Value, Autowired}
+import org.springframework.boot.context.embedded.FilterRegistrationBean
 import org.springframework.context.annotation.{Bean, Configuration}
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -28,7 +32,7 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .withUser("simi").password("pro").roles("ADMIN")
         .and()
         .withUser("simipro").password("pro").roles("USER")
-    }else {
+    } else {
       am.userDetailsService(userService)
     }
   }
@@ -36,6 +40,28 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   override def authenticationManagerBean():AuthenticationManager = {
     super.authenticationManagerBean()
+  }
+
+  @PostConstruct
+  def initDB(): Unit ={
+    // Create admin user
+    if (!debug) {
+      if (userService.loadUserByUsername("simi") == null) {
+        val user = new User()
+        user.setEmail("simi")
+        user.setPassword("pro")
+        userService.repo.save(user)
+      }
+    }
+  }
+
+  @Bean
+  def corsFilterChain(@Autowired() cors:CORSFilter): Unit = {
+    // set cors header before filter chain else we cant handle a failed response on client side
+    val registration = new FilterRegistrationBean(cors)
+    registration.setOrder(0)
+    registration.setName("CORSFilterChain")
+    registration
   }
 
 }

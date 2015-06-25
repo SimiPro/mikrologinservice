@@ -2,3 +2,5 @@ target
 .idea
 mikrologinservice.iml
 build
+mikrologinservice.ipr
+mikrologinservice.iws

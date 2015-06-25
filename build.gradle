@@ -21,17 +21,18 @@ mainClassName = "com.belongo.services.login.main.Application"
 
 repositories {
     mavenCentral()
-    maven { url "http://repo.spring.io/snapshot" }
-    maven { url "http://repo.spring.io/milestone" }
-    maven { url "http://repo.spring.io/release" }
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web:1.2.1.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-web:1.2.4.RELEASE"
     compile 'org.springframework.security.oauth:spring-security-oauth2:2.0.7.RELEASE'
-    compile "org.springframework.boot:spring-boot-starter-security:1.2.1.RELEASE"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa:1.2.1.RELEASE"
-    compile "org.hsqldb:hsqldb"
+    compile "org.springframework.boot:spring-boot-starter-security:1.2.4.RELEASE"
+
+    //Data
+    compile "com.h2database:h2:1.4.187"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:1.2.4.RELEASE"
+
+
     compile "org.scala-lang:scala-library:2.11.5"
     testCompile "junit:junit"
 }
