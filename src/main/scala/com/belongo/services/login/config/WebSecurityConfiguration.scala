@@ -3,7 +3,7 @@ package com.belongo.services.login.config
 import javax.annotation.PostConstruct
 import javax.servlet.FilterRegistration
 
-import com.belongo.services.login.services.{User, BelongoUser, UserService}
+import com.belongo.services.login.services.{BelongoUser, UserService}
 import org.springframework.beans.factory.annotation.{Value, Autowired}
 import org.springframework.boot.context.embedded.FilterRegistrationBean
 import org.springframework.context.annotation.{Bean, Configuration}
@@ -47,7 +47,7 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     // Create admin user
     if (!debug) {
       if (userService.loadUserByUsername("simi") == null) {
-        val user = new User()
+        val user = new BelongoUser()
         user.setEmail("simi")
         user.setPassword("pro")
         userService.repo.save(user)

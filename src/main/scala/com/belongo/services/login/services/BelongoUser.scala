@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails
 /**
  * Created by Simon on 25.06.2015.
  */
-class BelongoUser(user: User) extends UserDetails {
+class BelongoUserDetail(user: BelongoUser) extends UserDetails {
   override def isEnabled: Boolean = true
   override def getPassword: String = user.password
   override def isAccountNonExpired: Boolean = true

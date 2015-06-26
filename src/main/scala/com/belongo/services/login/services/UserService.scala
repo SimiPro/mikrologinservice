@@ -26,7 +26,7 @@ class UserService extends UserDetailsService {
     if (user == null) {
       return null
     }
-    new BelongoUser(user)
+    new BelongoUserDetail(user)
   }
 }
 
