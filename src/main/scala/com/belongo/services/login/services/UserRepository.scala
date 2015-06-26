@@ -18,8 +18,7 @@ trait UserRepository extends JpaRepository[BelongoUser, String]{
 }
 
 @Entity
-class BelongoUser {
-
+class BelongoUser extends Serializable {
 
   @Id
   @GeneratedValue(generator = "uuid")

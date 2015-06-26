@@ -1,6 +1,7 @@
 package com.belongo.services.login
 
 import com.belongo.services.login.config.CORSFilter
+import org.apache.commons.dbcp2.BasicDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.context.embedded.FilterRegistrationBean
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer
 import org.springframework.security.oauth2.config.annotation.web.configuration.{AuthorizationServerConfigurerAdapter, EnableAuthorizationServer}
 import org.springframework.security.oauth2.config.annotation.web.configurers.{AuthorizationServerEndpointsConfigurer, AuthorizationServerSecurityConfigurer}
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore
 
 @EnableAutoConfiguration
 @Configuration
@@ -20,6 +22,9 @@ class OAuthConfig extends AuthorizationServerConfigurerAdapter {
 
   @Autowired
   var authManager:AuthenticationManager = _
+
+  @Autowired
+  var datasource:BasicDataSource = _
 
   @Bean
   def corsFilterChain(@Autowired() cors:CORSFilter):FilterRegistrationBean = {
@@ -37,6 +42,7 @@ class OAuthConfig extends AuthorizationServerConfigurerAdapter {
 
   override def configure(endpoints:AuthorizationServerEndpointsConfigurer) = {
     endpoints.authenticationManager(authManager)
+    endpoints.tokenStore(new JdbcTokenStore(datasource))
   }
   override def configure(clients:ClientDetailsServiceConfigurer) = {
     clients.inMemory()
