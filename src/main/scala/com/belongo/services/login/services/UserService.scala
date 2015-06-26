@@ -30,21 +30,6 @@ class UserService extends UserDetailsService {
   }
 }
 
-class BelongoUser(user: User) extends UserDetails {
-  override def getAuthorities: util.Collection[_ <: GrantedAuthority] = List(new Authorithies)
-  override def isEnabled: Boolean = true
-  override def getPassword: String = user.password
-  override def isAccountNonExpired: Boolean = true
-  override def isCredentialsNonExpired: Boolean = true
-  override def isAccountNonLocked: Boolean = true
-  override def getUsername: String = user.email
 
-  def getId():String = user.id
 
-}
 
-class Authorithies extends GrantedAuthority {
-  override def getAuthority: String = {
-    "read_write"
-  }
-}
