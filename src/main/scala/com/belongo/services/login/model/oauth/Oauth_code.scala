@@ -14,7 +14,7 @@ class Oauth_code {
   @BeanProperty
   var code:String = _
   @BeanProperty
-  var authentication:Blob = _
+  var authentication:Array[Byte] = _
 
 
 }

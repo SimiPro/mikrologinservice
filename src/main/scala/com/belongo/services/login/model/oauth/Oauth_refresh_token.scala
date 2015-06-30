@@ -14,7 +14,7 @@ class Oauth_refresh_token {
   @BeanProperty
   var token_id:String = _
   @BeanProperty
-  var token:Blob = _
+  var token:Array[Byte] = _
   @BeanProperty
-  var authentication:Blob = _
+  var authentication:Array[Byte] = _
 }

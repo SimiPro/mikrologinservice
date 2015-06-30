@@ -14,7 +14,7 @@ class Oauth_access_token {
   @BeanProperty
   var token_id:String = _
   @BeanProperty
-  var token:Blob = _
+  var token:Array[Byte] = _
   @BeanProperty
   var authentication_id:String = _
   @BeanProperty
@@ -22,7 +22,7 @@ class Oauth_access_token {
   @BeanProperty
   var client_id:String = _
   @BeanProperty
-  var authentication:Blob = _
+  var authentication:Array[Byte] = _
   @BeanProperty
   var refresh_token:String = _
 
