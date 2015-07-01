@@ -16,7 +16,7 @@ class BelongoUserDetail(user: BelongoUser) extends UserDetails {
   override def isCredentialsNonExpired: Boolean = true
   override def isAccountNonLocked: Boolean = true
   override def getUsername: String = user.email
-  def getId():String = user.id
+  def getId():String = user.id.get
 
   override def getAuthorities: util.Collection[_ <: GrantedAuthority] = List(new Authorithies)
 }

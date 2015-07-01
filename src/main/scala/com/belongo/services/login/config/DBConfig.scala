@@ -1,16 +1,21 @@
 package com.belongo.services.login.config
 
 import java.net.URI
+import javax.annotation.PostConstruct
 
 import org.apache.commons.dbcp2.BasicDataSource
 import org.springframework.context.annotation.{Bean, Configuration}
+
+
+import slick.driver.PostgresDriver.api._
+
+
 
 /**
  * Created by Simon on 26.06.2015.
  */
 @Configuration
 class DBConfig {
-
 
   @Bean
   def getDatasource(): BasicDataSource = {
@@ -22,6 +27,13 @@ class DBConfig {
     }
     return basicDataSource
   }
+
+  @Bean
+  def database(): Database = {
+    Database.forDataSource(getDatasource())
+  }
+
+
 
 
   def setUpInMemoryDb(): BasicDataSource = {

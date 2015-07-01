@@ -1,37 +1,53 @@
 package com.belongo.services.login.services
 
-import javax.persistence.{GeneratedValue, Id, Entity}
 
-import org.hibernate.annotations.GenericGenerator
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.repository.CrudRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
+import slick.driver.PostgresDriver.api._
 
-import scala.beans.BeanProperty
+import scala.concurrent.Future
+
 
 /**
  * Created by simipro on 3/13/15.
  */
-trait UserRepository extends JpaRepository[BelongoUser, String]{
+trait UserRepository {
+  def save(s: BelongoUser): Unit
 
-  def findByEmail(email:String):BelongoUser
 
+  def findByEmail(email:String):Future[Option[BelongoUser]]
 }
 
-@Entity
-class BelongoUser extends Serializable {
+@Component
+class UserRepoImpl() extends UserRepository {
+  @Autowired
+  var db:Database = _
 
-  @Id
-  @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
-  @BeanProperty
-  var id:String = _
+  override def findByEmail(email: String): Future[Option[BelongoUser]] = {
+    val result = db.run(
+      User.findByEmail(email).result.headOption
+    )
+    result
+  }
 
-  @BeanProperty
-  var email:String = _
-
-  @BeanProperty
-  var password:String = _
-
-  @BeanProperty
-  var token:String = _
+  override def save(s: BelongoUser): Unit = {
+    db.run(User.users += s)
+  }
 }
+
+object User {
+  val users = TableQuery[User]
+
+  def findByEmail(email: String) = {
+    users.filter(_.email === email)
+  }
+}
+
+class User(tag:Tag) extends Table[BelongoUser](tag, "BelongoUser") {
+  def user_id = column[String]("id", O.PrimaryKey, O.AutoInc)
+  def email = column[String]("email")
+  def password = column[String]("password")
+  def * = (user_id.?, email, password) <> (BelongoUser.tupled, BelongoUser.unapply)
+}
+
+case class BelongoUser(id: Option[String], email:String, password:String)

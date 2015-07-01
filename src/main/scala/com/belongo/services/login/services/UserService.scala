@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.{UserDetails, UserDetailsService}
 import org.springframework.stereotype.Component
+import com.belongo.services.login.AsyncConfig._
+import scala.concurrent.Await
 
 /**
  * Created by simipro on 3/13/15.
@@ -20,13 +22,21 @@ class UserService extends UserDetailsService {
   @Autowired
   var repo:UserRepository = _
 
+
+
   override def loadUserByUsername(s: String): UserDetails = {
     log.info("loading user: " + s)
-    val user = repo.findByEmail(s)
-    if (user == null) {
-      return null
+    val userFuture = repo.findByEmail(s)
+    //TODO: Remove this
+    val user =  Await.result(userFuture, timeOut)
+    user.getOrElse(null) match {
+      case u:BelongoUser => return new BelongoUserDetail(u)
+      case null => return null
     }
-    new BelongoUserDetail(user)
+  }
+
+  def save(s:BelongoUser): Unit = {
+    repo.save(s)
   }
 }
 

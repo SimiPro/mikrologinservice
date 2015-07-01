@@ -1,14 +1,11 @@
 package com.belongo.services.login.model.oauth
 
-import java.sql.Blob
-import javax.persistence.{Id, Entity}
-
 import scala.beans.BeanProperty
 
 /**
  * Created by Simon on 26.06.2015.
  */
-@Entity
+/*@Entity
 class Oauth_client_token {
   @Id
   @BeanProperty
@@ -22,3 +19,4 @@ class Oauth_client_token {
   @BeanProperty
   var client_id:String = _
 }
+*/

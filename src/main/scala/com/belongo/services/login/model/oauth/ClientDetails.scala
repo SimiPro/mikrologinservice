@@ -1,13 +1,11 @@
 package com.belongo.services.login.model.oauth
 
-import javax.persistence.{Id, Entity}
-
 import scala.beans.BeanProperty
 
 /**
  * Created by Simon on 26.06.2015.
  */
-@Entity
+/*@Entity
 class ClientDetails {
   @Id
   @BeanProperty
@@ -33,3 +31,4 @@ class ClientDetails {
 
 
 }
+*/

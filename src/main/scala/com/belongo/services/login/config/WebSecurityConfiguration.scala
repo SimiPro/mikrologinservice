@@ -42,19 +42,6 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     super.authenticationManagerBean()
   }
 
-  @PostConstruct
-  def initDB(): Unit ={
-    // Create admin user
-    if (!debug) {
-      if (userService.loadUserByUsername("simi") == null) {
-        val user = new BelongoUser()
-        user.setEmail("simi")
-        user.setPassword("pro")
-        userService.repo.save(user)
-      }
-    }
-  }
-
   @Bean
   def corsFilterChain(@Autowired() cors:CORSFilter): Unit = {
     // set cors header before filter chain else we cant handle a failed response on client side
