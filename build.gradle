@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE'
+        classpath 'org.batcha.gradle.plugins:git-dependencies:0.2'
     }
 }
 
@@ -16,6 +17,7 @@ apply plugin: 'scala'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'git-dependencies'
 
 mainClassName = "com.belongo.services.login.main.Application"
 
@@ -34,6 +36,8 @@ dependencies {
     compile "org.postgresql:postgresql:9.4-1201-jdbc41"
     compile "com.typesafe.slick:slick_2.11:3.0.0"
 
+    compile('com.belongo:BelongoExtensions:1.0').ext.git = 'https://github.com/SimiPro/BelongoExtensions.git'
+
     compile "org.scala-lang:scala-library:2.11.5"
     testCompile "junit:junit"
 }
@@ -45,7 +49,7 @@ jar {
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '2.1'
 }
 
 task stage(type:Copy, dependsOn: [clean,  build]) {

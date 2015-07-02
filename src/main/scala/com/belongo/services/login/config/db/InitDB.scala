@@ -21,8 +21,8 @@ class InitDB {
   @Autowired
   var db:Database = _
 
-  import com.belongo.services.login.model.oauth.Token._
-  import com.belongo.services.login.model.oauth.Refresh_Token._
+  import com.belongo.services.login.model.oauth.TokenTable._
+  import com.belongo.services.login.model.oauth.Refresh_TokenTable._
   import com.belongo.services.login.services.User._
 
   @PostConstruct

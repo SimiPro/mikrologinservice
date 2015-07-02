@@ -2,9 +2,10 @@ package com.belongo.services.login.services
 
 import java.util
 
-import collection.JavaConversions._
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+
+import scala.collection.JavaConversions._
 
 /**
  * Created by Simon on 25.06.2015.
@@ -26,3 +27,5 @@ class Authorithies extends GrantedAuthority {
     "read_write"
   }
 }
+
+case class BelongoUser(id: Option[String], email:String, password:String)

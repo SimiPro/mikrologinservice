@@ -17,6 +17,7 @@ import scala.concurrent.Await
 class TokenDao {
 
 
+
   import Refresh_TokenTable._
   import TokenTable._
 
@@ -24,19 +25,24 @@ class TokenDao {
   var db:Database = _
 
 
+  def save(toki: Token): Unit = db.run(tokens += toki)
+  def save(toki: Refresh_Token):Unit = db.run(refresh_tokens += toki)
+  def removeRefreshToken(token:String) = refresh_tokens.filter(_.token === token).delete
 
-  def removeRefreshToken(token:String) = refresh_tokens.filter(_.id === token).delete
-  def getAccessToken(authentication_id: String): Token = {
-    val result = db.run(
-      tokens.filter(_.authentication_id === authentication_id).result.headOption
-    )
-    val token = Await.result(result,timeOut)
-    token.getOrElse(null) match {
-      case null => return null
-      case a:Token => return a
-    }
 
+  def getAccessToken(authentication_id: String): Option[Token] = {
+    val result = db.run(tokens.filter(_.auth_key === authentication_id).result.headOption)
+    Await.result(result,timeOut)
   }
 
+  def findByToken(s: String): Option[Token] = {
+    val result = db.run(tokens.filter(_.id === s).result.headOption)
+    Await.result(result, timeOut)
+  }
+
+  def findRefreshToken(hashedToken: String): Option[Refresh_Token] = {
+    val result = db.run(refresh_tokens.filter(_.token === hashedToken).result.headOption)
+    Await.result(result, timeOut)
+  }
 
 }

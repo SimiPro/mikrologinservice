@@ -35,19 +35,7 @@ class UserRepoImpl() extends UserRepository {
   }
 }
 
-object User {
-  val users = TableQuery[User]
 
-  def findByEmail(email: String) = {
-    users.filter(_.email === email)
-  }
-}
 
-class User(tag:Tag) extends Table[BelongoUser](tag, "BelongoUser") {
-  def user_id = column[String]("id", O.PrimaryKey, O.AutoInc)
-  def email = column[String]("email")
-  def password = column[String]("password")
-  def * = (user_id.?, email, password) <> (BelongoUser.tupled, BelongoUser.unapply)
-}
 
-case class BelongoUser(id: Option[String], email:String, password:String)
+
