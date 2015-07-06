@@ -5,7 +5,7 @@ import java.util
 import java.util.Date
 
 import com.belongo.services.login.model.oauth.{Refresh_Token, Token, TokenDao}
-import com.belongo.services.login.services.BelongoUser
+import com.belongo.services.login.services.{BelongoUserDetail, BelongoUser}
 import org.apache.commons.dbcp2.BasicDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.oauth2.common.{DefaultOAuth2RefreshToken, DefaultOAuth2AccessToken, OAuth2AccessToken, OAuth2RefreshToken}
@@ -61,20 +61,27 @@ class BelongoTokenStore extends TokenStore {
   }
 
   def createDefaultOauthToken(token:Option[Token]): OAuth2AccessToken = {
-    token isNull () otherwise ()
     token match {
-      case Some =>
-      case None =>
+      case Some(token) => {
+        val defaultToken = new DefaultOAuth2AccessToken(token.id)
+        defaultToken.setTokenType(token.tokenType)
+        defaultToken.setExpiration(token.expiration)
+        defaultToken.setRefreshToken(createDefaultRefreshOAuthToken(token.refresh_token))
+        defaultToken
+      }
+      case None => null
     }
-    val defaultToken = new DefaultOAuth2AccessToken(token.id)
-    defaultToken.setTokenType(token.tokenType)
-    defaultToken.setExpiration(token.expiration)
-    defaultToken
   }
 
-  def createDefaultRefreshOauthToken(refresh_token:Refresh_Token): OAuth2RefreshToken = {
-    val default_refresh_token = new DefaultOAuth2RefreshToken(refresh_token.token)
-    default_refresh_token
+  def createDefaultRefreshOAuthToken(refresh_token:Option[Refresh_Token]): OAuth2RefreshToken = {
+    refresh_token match {
+      case None => null
+      case Some(token) => createDefaultRefreshOAuthToken(token.token)
+    }
+  }
+
+  def createDefaultRefreshOAuthToken(refresh_token:String):OAuth2RefreshToken = {
+    new DefaultOAuth2RefreshToken(refresh_token)
   }
 
   override def storeRefreshToken(refreshToken: OAuth2RefreshToken, authentication: OAuth2Authentication): Unit = {
@@ -89,7 +96,9 @@ class BelongoTokenStore extends TokenStore {
     createDefaultOauthToken(token)
   }
 
-  override def removeAccessToken(token: OAuth2AccessToken): Unit = ???
+  override def removeAccessToken(token: OAuth2AccessToken): Unit = {
+    tokenRepo.removeAccessToken(hashToken(token.getValue))
+  }
 
   override def findTokensByClientIdAndUserName(clientId: String, userName: String): util.Collection[OAuth2AccessToken] = ???
 
@@ -99,23 +108,22 @@ class BelongoTokenStore extends TokenStore {
     val scope = token.getScope
     val token_type = token.getTokenType
     val id = hashToken(token.getValue)
-    val user_id = authentication.getUserAuthentication.asInstanceOf[BelongoUser].id
+    val user_id = authentication.getUserAuthentication.getPrincipal.asInstanceOf[BelongoUserDetail].getId()
     val client_id = authentication.getOAuth2Request.getClientId
     val toki = Token(id,
-      user_id.get,
+      user_id,
       key,
       client_id,
       hashToken(token.getRefreshToken.getValue),
       token_type,
-      new Date(expires_in))
+      new java.sql.Timestamp(System.currentTimeMillis + (expires_in * 1000L)))
 
     tokenRepo.save(toki)
-
   }
 
   override def readRefreshToken(tokenValue: String): OAuth2RefreshToken = {
     val refresh_token = tokenRepo.findRefreshToken(hashToken(tokenValue))
-    create
+    createDefaultRefreshOAuthToken(refresh_token)
   }
 
   override def readAuthenticationForRefreshToken(token: OAuth2RefreshToken): OAuth2Authentication = ???

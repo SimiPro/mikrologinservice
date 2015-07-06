@@ -30,8 +30,8 @@ class UserService extends UserDetailsService {
     //TODO: Remove this
     val user =  Await.result(userFuture, timeOut)
     user.getOrElse(null) match {
-      case u:BelongoUser => return new BelongoUserDetail(u)
-      case null => return null
+      case u:BelongoUser => new BelongoUserDetail(u)
+      case null => null
     }
   }
 

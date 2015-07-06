@@ -3,6 +3,7 @@ package com.belongo.services.login.model.oauth
 import java.util.Date
 
 
+import com.belongo.services.login.services.User
 import slick.driver.PostgresDriver.api._
 
 
@@ -16,10 +17,14 @@ class TokenTable(tag: Tag)
   def auth_key = column[String]("auth_key")
   def client_id = column[String]("client_id")
   def refresh_token_id = column[String]("refresh_token_id")
+  def token_type = column[String]("token_type")
+  def expiration = column[java.sql.Timestamp]("expiration")
   //TODO: IMPL SCOPE def scope = column[Set[String]]("scope")
-  def * = (id , user_id, user_id, client_id, refresh_token_id) <> (Token.tupled, Token.unapply)
+  def * = (id , user_id, auth_key, client_id, refresh_token_id, token_type, expiration) <> (Token.tupled, Token.unapply)
 
-  def user = foreignKey("USER_FK", user_id, Users.users)
+  def user = foreignKey("USER_FK", user_id, User.users)(_.id)
+  def user_index = index("user_index", user_id, unique = true)
+
 
 
 }
@@ -27,11 +32,11 @@ class TokenTable(tag: Tag)
 case class Token(
                   id:String,
                   user_id:String,
-                auth_key:String,
+                  auth_key:String,
                   client_id:String,
                   refresh_token:String,
                   tokenType: String,
-                  expiration: Date
+                  expiration: java.sql.Timestamp
                   ) {
 
 }

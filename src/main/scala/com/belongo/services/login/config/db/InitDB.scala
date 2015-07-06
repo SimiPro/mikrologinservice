@@ -32,7 +32,7 @@ class InitDB {
         refresh_tokens.schema ++
         users.schema).create,
 
-      users += BelongoUser(null, "simi", "pro")
+      users += BelongoUser("simi", "pro")
     )
 
     val result =  db.run(setup)

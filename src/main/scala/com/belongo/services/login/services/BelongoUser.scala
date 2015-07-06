@@ -2,6 +2,7 @@ package com.belongo.services.login.services
 
 import java.util
 
+import com.belongo.services.login.config.db.UUIDGenerator
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
@@ -28,4 +29,4 @@ class Authorithies extends GrantedAuthority {
   }
 }
 
-case class BelongoUser(id: Option[String], email:String, password:String)
+case class BelongoUser(email:String, password:String,id: Option[String] = Option(UUIDGenerator.generateId()))

@@ -30,6 +30,7 @@ class UserRepoImpl() extends UserRepository {
     result
   }
 
+
   override def save(s: BelongoUser): Unit = {
     db.run(User.users += s)
   }
